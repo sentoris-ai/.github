@@ -2,14 +2,14 @@
 
 **Control the Uncertainty.**
 
-Sentoris is an open-source protocol and control plane that brings determinism, governance, and auditability to AI inference.
-
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Twitter](https://img.shields.io/twitter/follow/sentoris_ai?style=social)](https://twitter.com/sentoris_ai)
 
+[English](./README.md) | [中文](./README-zh.md)
+
 ---
 
-### ⚔️ The Challenge
+### ⚔️ The Challenge We Solve
 
 AI inference is non-deterministic, making it difficult to:
 - 🔁 Reproduce results for debugging or compliance
