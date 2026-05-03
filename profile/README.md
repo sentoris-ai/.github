@@ -1,133 +1,195 @@
-# 📘 PROVENANCE Protocol
+<!--
+  .github/README.md
+  PROVENANCE Protocol — Organization Homepage
+  The Execution Provenance Layer for AI Agents
+  Last updated: 2026-05-03
+-->
 
-> **The Execution Provenance Layer for AI Agents**
+<div align="center">
 
-[![PROVENANCE v1.0.0](https://img.shields.io/badge/PROVENANCE-v1.0.0-38BDF8?style=for-the-badge&logoColor=white)](https://provenance-protocol.dev)
-[![Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge&logoColor=white)](LICENSE)
-[![Community Driven](https://img.shields.io/badge/Community-Driven-F472B6?style=for-the-badge&logoColor=white)](https://github.com/provenance-protocol/spec/discussions)
+# PROVENANCE Protocol
 
-> 🔒 **"No server. No secret. No trust required."**
->
-> PROVENANCE extends execution audit standards (IETF AAT, W3C PROV) with cryptographic verifiability — making every AI agent action **independently provable for the first time**.
+[![Spec v1.0.0](https://img.shields.io/badge/Spec-v1.0.0-38BDF8?style=for-the-badge)](https://github.com/provenance-protocol/spec/releases/tag/v1.0.0)
+[![Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/LICENSE)
+[![Conformance](https://img.shields.io/badge/Conformance-Automated_Certification-brightgreen?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/conformance/v1/certification_criteria.md)
+[![RFC 2119](https://img.shields.io/badge/Semantics-RFC_2119_Precision-4B0082?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/spec/2.0_terminology_and_notation.md)
+[![Governance](https://img.shields.io/badge/Governance-Open_Meritocracy-38BDF8?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/GOVERNANCE.md)
 
----
+> **The Execution Provenance Layer for AI Agents**  
+> PROVENANCE transforms probabilistic LLM inference into **deterministic, cryptographically verifiable engineering events**.  
+> 🔒 *No server. No secret. No trust required.*
 
-## 🧭 The Agent Protocol Stack
-
-PROVENANCE occupies the **Execution Provenance Layer** — the missing third pillar of the AI agent protocol stack:
-
-```
-┌─────────────────┐     ┌─────────────────┐
-│ 🔗 MCP          │     │ 🤝 A2A          │
-│ Tool Connectivity│     │ Agent Coordination│
-└────────┬────────┘     └────────┬────────┘
-         │                       │
-         ▼                       ▼
-    ┌───────────────────────────────┐
-    │ 🤖 AI Agent                    │
-    └────────┬───────────────────────┘
-             │
-             ▼
-    ┌───────────────────────────────┐
-    │ ✅ PROVENANCE                  │
-    │ Execution Provenance Layer    │
-    │ "Connect actions to proof"    │
-    └───────────────────────────────┘
-```
-
-| Protocol | Layer | Responsibility |
-|:---|:---|:---|
-| **MCP** (Anthropic) | Tool Connectivity | Connect agents to tools |
-| **A2A** (Google) | Agent Coordination | Connect agents to each other |
-| **PROVENANCE** | **Execution Provenance** | **Connect actions to cryptographic proof** |
-
-> MCP connects agents to tools. A2A connects agents to each other. PROVENANCE connects agent actions to cryptographic proof — without requiring trust in any infrastructure.
+</div>
 
 ---
 
-## 🎯 Why PROVENANCE?
+## 👋 New here? Start with:
 
-| 🔐 Cryptographic Audit | 💰 Streaming Budget | 🛡️ Privacy Grading |
+<div align="center">
+
+[📖 5-Minute Quick Start](https://github.com/provenance-protocol/spec/blob/main/spec/1.0_abstract_and_scope.md) · 
+[🧪 Try the Reference CLI](https://github.com/provenance-protocol/prvn) · 
+[💬 Ask the Community](https://github.com/provenance-protocol/spec/discussions)
+
+</div>
+
+---
+
+## 🌐 Strategic Positioning
+
+The AI Agent era has solved *connectivity* (MCP) and *coordination* (A2A). It now faces a foundational gap: **verifiability**.  
+PROVENANCE fills this void by introducing a standardized, implementation-agnostic **Execution Provenance Layer** that cryptographically proves *how*, *why*, and *under what constraints* an agent acted.
+
+### Protocol Stack
+
+```mermaid
+graph TD
+    MCP["🔗 MCP<br/>Tool Connectivity"] --> Agent
+    A2A["🤝 A2A<br/>Agent Coordination"] --> Agent
+    Agent["🤖 AI Agent"] --> PROVENANCE["✅ PROVENANCE<br/>Execution Provenance"]
+```
+
+> MCP connects tools. A2A coordinates agents. PROVENANCE proves execution — without requiring trust in any infrastructure.
+
+PROVENANCE is **orthogonal, not competitive**. It sits transparently atop any OpenAI-compatible endpoint, capturing execution lineage, enforcing declarative constraints, and emitting tamper-evident audit proofs.
+
+### PROVENANCE vs. IETF AAT
+
+| Aspect | IETF AAT (Agent Audit Trail) | PROVENANCE Protocol |
 |:---|:---|:---|
-| RFC 8785 JCS + SHA-256 | Atomic cost metering | `raw` / `masked` / `hash_only` |
-| Tamper-evident, independently verifiable | Hard-stop at micro-cent precision | GDPR / CCPA compliant |
+| **Scope** | Standardizes audit *log format* for agent actions | Standardizes full *execution contract lifecycle* |
+| **Core Value** | "What happened" — structured audit records | "How & why it happened" — cryptographically provable execution |
+| **Technical Focus** | JSON schema, field definitions, transport norms | Four-tuple contract, constraint enforcement, JCS+SHA-256 proofs |
+| **Verification** | Trust in logging infrastructure assumed | Zero-trust: anyone can verify offline with public algorithms |
+| **Extensibility** | Fixed schema, versioned updates | Namespace-isolated extensions via `provenance.ai/v{major}/{feature}` |
 
-| 🔄 Deterministic Replay | 🔗 Zero-Trust Verification |
+> 💡 **Key Insight**: AAT defines *what to record*. PROVENANCE defines *how to prove it*.
+
+---
+
+## 🧠 The Core Abstraction: Execution Contract
+
+Every LLM invocation is standardized into a verifiable four-tuple lifecycle:
+
+| Tuple | Semantic Responsibility | Protocol Guarantee |
+|:---|:---|:---|
+| **📥 Input** | Request context snapshot (prompt, model, params) | Captured at `INIT`; immutable |
+| **⚙️ Constraints** | Declarative execution boundaries (budget, privacy, reproducibility) | Evaluated in `CONSTRAINT_EVAL`; violations block upstream |
+| **📈 Observations** | Execution artifacts (tokens, cost, latency, state transitions) | Streamed during `EXECUTING`; finalized before proof |
+| **🔐 Proofs** | Cryptographic evidence of contract compliance (JCS + SHA-256) | Generated at `FINALIZED`/`FAILED`; enables offline verification |
+
+```mermaid
+graph LR
+    Input[📥 Input] --> Constraints[⚙️ Constraints]
+    Constraints --> Observations[📈 Observations]
+    Observations --> Proofs[🔐 Proofs]
+    Proofs -.->|Independently Verifiable| Input
+```
+
+---
+
+## 🛡️ Key Capabilities
+
+| Capability | Specification | Enterprise Value |
+|:---|:---|:---|
+| 🔐 **Cryptographic Audit** | RFC 8785 JCS + SHA-256 hash chain | Tamper-evident records; meets EU AI Act, HIPAA, SOC 2 |
+| 💰 **Streaming Budget Control** | Atomic micro-cent metering with hard-stop | Prevents unbounded consumption; enables AI FinOps |
+| 🛡️ **Privacy Grading** | `raw` / `masked` / `hash_only` storage | GDPR/CCPA data minimization; zero-plaintext compliance |
+| 🔄 **Deterministic Replay & Diff** | Baseline-candidate comparison with semantic risk scoring | Model regression testing; CI/CD gates for AI releases |
+| 🔌 **Extensible Namespacing** | `provenance.ai/v{major}/{feature}` isolation | Pluggable policy engines, memory firewalls, economic SLAs |
+
+---
+
+## 🔒 Zero-Trust Verification Guarantee
+
+PROVENANCE assumes **storage, transport, and execution environments are untrusted**. Independent verification requires only:
+1. The raw Trace JSON
+2. Public algorithms (RFC 8785 + SHA-256)
+3. A standard cryptographic library
+
+```bash
+# Canonicalize and verify an execution trace offline
+# Option A: Using npm canonicalize (Node.js)
+jq 'del(._*, .observations.internal_metrics)' trace.json \
+  | npx canonicalize \
+  | sha256sum
+
+# Option B: Using PyPI jsoncanon (Python)
+jq 'del(._*, .observations.internal_metrics)' trace.json \
+  | python -m jsoncanon \
+  | sha256sum
+
+# Compare output with trace.proofs.audit_signature
+# ✅ Match = Untampered | ❌ Mismatch = Tamper detected
+```
+
+> 💡 *Audit trails record what was done. PROVENANCE proves it.*
+
+---
+
+## 🌍 Standards & Compliance Alignment
+
+PROVENANCE is engineered for enterprise interoperability and regulatory readiness:
+
+| Standard / Framework | PROVENANCE Mapping |
 |:---|:---|
-| Baseline-vs-candidate diff | Offline validation |
-| Regression testing across model versions | No server. No secret. No trust. |
-
-> 💡 **Key Insight**: Unlike audit logging standards that require trust in the infrastructure, PROVENANCE traces are **self-authenticating**. Anyone can verify execution integrity offline using only public algorithms and the raw trace JSON.
+| **NIST AI RMF 1.0** | `constraints` → GOVERN, `observations` → MAP, `risk` → MEASURE, `audit` → MANAGE |
+| **ISO/IEC 42001** | Execution lifecycle & tamper-evident audit trails align with AIMS requirements |
+| **GDPR / CCPA** | Privacy grading + TTL expiry + deletion audit logs satisfy data minimization & erasure rights |
+| **OpenTelemetry GenAI** | Native `gen_ai.*` attribute mapping; exports spans/metrics via OTLP |
+| **W3C PROV** | Lineage model compatible via `parent_id` → `prov:wasDerivedFrom` |
+| **OWASP LLM Top 10** | Threat model covers prompt injection, unbounded consumption, insecure output handling |
 
 ---
 
 ## 🗂️ Repository Map
 
-| Repository | Description | Status |
-|:---|:---|:---|
-| [**spec**](https://github.com/provenance-protocol/spec) | Protocol specification & JSON Schemas (RFC 2119) | ✅ Stable v1.0.0 |
-| [**prvn**](https://github.com/provenance-protocol/prvn) | Reference CLI — pronounced *"proven"* | 🚧 Beta |
-| [**sdk-go**](https://github.com/provenance-protocol/sdk-go) | Go SDK | 🚧 Beta |
-| [**sdk-python**](https://github.com/provenance-protocol/sdk-python) | Python SDK | 🚧 Beta |
-| [**validator**](https://github.com/provenance-protocol/validator) | Independent trace verification | ✅ Stable |
-| [**docs**](https://github.com/provenance-protocol/docs) | Guides, tutorials, examples | 📚 Active |
+| Repository | Purpose | Language | Status |
+|:---|:---|:---|:---|
+| [**spec**](https://github.com/provenance-protocol/spec) | Protocol specification, RFCs, JSON Schemas | Markdown / JSON Schema | ✅ Stable v1.0.0 |
+| [**prvn**](https://github.com/provenance-protocol/prvn) | Reference CLI — pronounced *"proven"* | Go | 🚧 Beta |
+| [**sdk-python**](https://github.com/provenance-protocol/sdk-python) | Python SDK with OTel export | Python | 🚧 Beta |
+| [**validator-js**](https://github.com/provenance-protocol/validator-js) | Schema validation & CI integration | JavaScript | ✅ Stable |
+| [**conformance**](https://github.com/provenance-protocol/spec/tree/main/conformance/v1) | Automated test suite & certification criteria | Python / Shell | ✅ Active |
 
-> 🗣️ **PRVN** is pronounced **/ˈpruːvən/** — "proven", as in "proven execution". It is the developer-facing engineering interface of the PROVENANCE Protocol.
+> 🗣️ **PRVN** is pronounced **/ˈpruːvən/** — "proven", as in "proven execution". It is the developer-facing engineering interface of the PROVENANCE Protocol.  
+> ℹ️ *Note: `prvn` refers specifically to the PROVENANCE Protocol reference CLI. Other tools using similar names are unrelated.*
 
 ---
 
 ## 🚀 Get Started in 60 Seconds
 
 ```bash
-# Install the reference CLI
+# 1. Install reference CLI (Go)
 go install github.com/provenance-protocol/prvn/cmd/prvn@latest
 
-# Initialize provenance tracking
-prvn init --agent my-agent
+# 2. Run with governance headers
+export OPENAI_BASE_URL="https://api.openai.com"
+prvn proxy --listen :8080 --upstream "$OPENAI_BASE_URL"
 
-# Verify a trace independently — no server required
+# 3. Verify a trace independently (zero trust)
 prvn verify trace.json
 ```
 
-📖 [Quick Start Guide](https://docs.provenance-protocol.dev/getting-started) · 📐 [Protocol Spec v1.0.0](https://spec.provenance-protocol.dev/v1.0.0) · 🧪 [Conformance Tests](https://github.com/provenance-protocol/spec/tree/main/conformance)
+📖 [Full Specification](https://github.com/provenance-protocol/spec/tree/main/spec) · 
+📐 [JSON Schemas](https://github.com/provenance-protocol/spec/tree/main/schemas/v1) · 
+🧪 [Conformance Suite](https://github.com/provenance-protocol/spec/tree/main/conformance/v1) · 
+📜 [Contributing Guide](https://github.com/provenance-protocol/spec/blob/main/CONTRIBUTING.md)
 
 ---
 
-## 🏅 Certification Tiers
+## 🏅 Conformance Certification
 
-| Badge | Requirements | Use Case |
+Certification is **fully automated, objective, and vendor-neutral**. Implementations earn badges by passing public test vectors:
+
+| Tier | Requirements | Badge |
 |:---|:---|:---|
-| 🔵 **Core Compatible** | Schema + Proof + Headers | Lightweight SDKs, embedded agents |
-| 🟢 **Full Compatible** | Core + Budget + State Machine + Privacy | Production proxies, enterprise gateways |
-| 🟡 **Extended Compatible** | Full + ≥2 official extension namespaces | Compliance-critical deployments |
+| 🔵 **Core Compatible** | Schema validation + Proof integrity + Header negotiation | [![Core](https://img.shields.io/badge/PROVENANCE-Core-Compatible-blue?style=flat-square)](https://github.com/provenance-protocol/spec/blob/main/conformance/v1/certification_criteria.md) |
+| 🟢 **Full Compatible** | Core + Constraint enforcement + State machine + Error contract | [![Full](https://img.shields.io/badge/PROVENANCE-Full-Compatible-green?style=flat-square)](https://github.com/provenance-protocol/spec/blob/main/conformance/v1/certification_criteria.md) |
+| 🟡 **Extended Compatible** | Full + ≥2 official extensions (e.g., `memory_firewall`) | [![Extended](https://img.shields.io/badge/PROVENANCE-Extended-Compatible-yellow?style=flat-square)](https://github.com/provenance-protocol/spec/blob/main/conformance/v1/certification_criteria.md) |
 
+Badges link to publicly verifiable compliance reports. No manual review. No commercial gatekeeping.  
 [View Certified Implementations →](https://github.com/provenance-protocol/spec/blob/main/ADOPTERS.md)
-
----
-
-## 🌐 Standards Alignment
-
-PROVENANCE is not a replacement for existing standards — it extends them with cryptographic provability:
-
-| Standard | PROVENANCE's Role |
-|:---|:---|
-| **W3C PROV** | Extended for the agent execution domain (cf. PROV-AGENT) |
-| **IETF AAT** | Complementary — AAT defines log *format*, PROVENANCE adds *provability* |
-| **NIST AI RMF 1.0** | Capabilities map to Govern / Map / Measure / Manage pillars |
-| **OpenTelemetry** | Exports traces as OTel spans with `gen_ai.*` semantic conventions |
-
----
-
-## 🤝 Ecosystem Integration
-
-### OpenClaw
-PROVENANCE captures every skill installation and tool call as cryptographically signed provenance data. In an ecosystem where malicious plugins can slip past static analysis, PROVENANCE ensures that **all actions — benign or malicious — are indelibly recorded and verifiable**.
-
-### Hermes Agent
-Hermes advocates for trustworthy, controllable, auditable agents across the full autonomous lifecycle. PROVENANCE provides the cryptographic foundation for **runtime verifiability** — proving that agent behaviors align with declared policies throughout autonomous evolution.
-
-### OpenTelemetry
-PROVENANCE traces export seamlessly into existing observability stacks via OTel `gen_ai.*` semantic conventions — **observability without trust is just monitoring; with PROVENANCE, it becomes verifiability**.
 
 ---
 
@@ -143,23 +205,77 @@ Great protocols are honest about what they optimize for:
 
 ---
 
-## 🤲 Join the Community
+## 🗓️ Protocol Evolution
 
-PROVENANCE is built in the open, governed by a [community TSC](https://github.com/provenance-protocol/spec/blob/main/GOVERNANCE.md), and guided by an [RFC process](https://github.com/provenance-protocol/spec/blob/main/GOVERNANCE.md#3-rfc-request-for-comments-process).
+| Version | Date | Key Milestone |
+|---------|------|---------------|
+| v1.0.0 | 2026-04 | Stable release: Core execution contract + cryptographic audit |
+| v1.1.0 | 2026-Q3 (planned) | Batch governance + federated audit chains |
+| v2.0.0 | 2027+ (vision) | Post-quantum signatures + zero-knowledge proofs |
 
-[💬 Discussions](https://github.com/provenance-protocol/spec/discussions) · [📜 RFC Proposals](https://github.com/provenance-protocol/spec/issues?q=label%3Arfc) · [🐛 Report Issue](https://github.com/provenance-protocol/spec/issues) · [🔐 Security Policy](https://github.com/provenance-protocol/spec/blob/main/SECURITY.md) · [📖 Contributing Guide](https://github.com/provenance-protocol/spec/blob/main/CONTRIBUTING.md)
+> 🔄 All v1.x releases guarantee backward compatibility for core fields.  
+> Major changes follow the [RFC process](https://github.com/provenance-protocol/spec/blob/main/GOVERNANCE.md#3-rfc-request-for-comments-process).
+
+---
+
+## 📚 Academic Citation
+
+If you use PROVENANCE in research, please cite:
+
+```bibtex
+@misc{provenance2026,
+  title={PROVENANCE: Execution Provenance Protocol for AI Agents},
+  author={Lee, William and the PROVENANCE Community},
+  year={2026},
+  month={Apr},
+  howpublished={\url{https://github.com/provenance-protocol/spec}},
+  note={v1.0.0 Specification}
+}
+```
+
+🔗 [Preprint on arXiv](https://arxiv.org/abs/2605.xxxxx) · 
+📄 [Full Specification PDF](https://github.com/provenance-protocol/spec/releases/download/v1.0.0/spec-v1.0.0.pdf)
+
+> ℹ️ *arXiv link will be updated upon paper publication. Please check back for the final DOI.*
+
+---
+
+## 🤝 Governance & Evolution
+
+PROVENANCE follows an **Open Meritocracy** model under a community Technical Steering Committee (TSC):
+- 📜 **RFC Process**: All major changes undergo public review, TSC voting, and semantic versioning
+- 🔐 **IPR Policy**: Apache 2.0 with explicit patent grant & no-retaliation pledge
+- 🌍 **Community-Driven**: Maintainer nomination, quarterly transparency reports, extension registry
+- 🛡️ **Security**: Responsible disclosure via `security@provenance.ai`; threat model covers BudgetLeak, replay, and supply-chain risks
+
+📖 [GOVERNANCE.md](https://github.com/provenance-protocol/spec/blob/main/GOVERNANCE.md) · 
+🔐 [IPR-POLICY.md](https://github.com/provenance-protocol/spec/blob/main/IPR-POLICY.md) · 
+🐛 [SECURITY.md](https://github.com/provenance-protocol/spec/blob/main/SECURITY.md)
+
+---
+
+<div align="center">
+
+## 🌐 Join the Ecosystem
+
+[💬 Discussions](https://github.com/provenance-protocol/spec/discussions) ·
+[📜 RFC Proposals](https://github.com/provenance-protocol/spec/issues?q=label%3Arfc) ·
+[🐛 Report Bug](https://github.com/provenance-protocol/spec/issues) ·
+[📖 Adoption Guide](https://github.com/provenance-protocol/spec/blob/main/ADOPTERS.md) ·
+[⭐ Star the Spec](https://github.com/provenance-protocol/spec)
 
 > *"Trust is not enough. You need proof."*
+
+</div>
 
 ---
 
 <div align="center" style="color: #64748b; font-size: 0.9em; margin-top: 2em;">
 
-PROVENANCE™ is a community-driven open standard.  
-The PROVENANCE name and logo are marks of the PROVENANCE Protocol community.  
+© 2026 PROVENANCE Protocol Authors. Licensed under [Apache License 2.0](https://github.com/provenance-protocol/spec/blob/main/LICENSE).  
+**The "PROVENANCE" name and logo are marks of the PROVENANCE Protocol community.**  
 PRVN is the reference implementation.  
-Not affiliated with any single company or vendor.
-
-[Apache License 2.0](LICENSE) · [Code of Conduct](CODE_OF_CONDUCT.md)
+Implementations `MAY` declare compatibility upon passing conformance tests.  
+Not affiliated with any single company, vendor, or cloud provider.
 
 </div>
