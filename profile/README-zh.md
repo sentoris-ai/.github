@@ -1,9 +1,3 @@
-<!--
-  .github/README-zh.md
-  PROVENANCE Protocol — Organization Homepage (Chinese)
-  AI 智能体执行溯源层
--->
-
 <div align="center">
 
 # PROVENANCE 协议
