@@ -1,3 +1,5 @@
+<div align="center">
+    
 # 📘 PROVENANCE Protocol
 
 [![Spec v1.0.0](https://img.shields.io/badge/Spec-v1.0.0-38BDF8?style=for-the-badge)](https://github.com/provenance-protocol/spec/releases/tag/v1.0.0)
@@ -10,6 +12,7 @@
 > PROVENANCE transforms probabilistic LLM inference into **deterministic, cryptographically verifiable engineering events**.  
 > 🔒 *No server. No secret. No trust required.*
 
+</div>
 ---
 
 <div align="center">
