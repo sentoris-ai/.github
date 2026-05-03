@@ -1,23 +1,22 @@
-<!--
-  .github/README.md
-  PROVENANCE Protocol — Organization Homepage
-  The Execution Provenance Layer for AI Agents
-  Last updated: 2026-05-03
--->
-
-<div align="center">
-
-# PROVENANCE Protocol
+# 📘 PROVENANCE Protocol
 
 [![Spec v1.0.0](https://img.shields.io/badge/Spec-v1.0.0-38BDF8?style=for-the-badge)](https://github.com/provenance-protocol/spec/releases/tag/v1.0.0)
-[![Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/LICENSE)
+[![Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge)](LICENSE)
 [![Conformance](https://img.shields.io/badge/Conformance-Automated_Certification-brightgreen?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/conformance/v1/certification_criteria.md)
 [![RFC 2119](https://img.shields.io/badge/Semantics-RFC_2119_Precision-4B0082?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/spec/2.0_terminology_and_notation.md)
-[![Governance](https://img.shields.io/badge/Governance-Open_Meritocracy-38BDF8?style=for-the-badge)](https://github.com/provenance-protocol/spec/blob/main/GOVERNANCE.md)
+[![Governance](https://img.shields.io/badge/Governance-Open_Meritocracy-38BDF8?style=for-the-badge)](GOVERNANCE.md)
 
 > **The Execution Provenance Layer for AI Agents**  
 > PROVENANCE transforms probabilistic LLM inference into **deterministic, cryptographically verifiable engineering events**.  
 > 🔒 *No server. No secret. No trust required.*
+
+---
+
+<div align="center">
+
+### 🌐 Language / 语言
+
+[**🇬🇧 English**](README.md) · [**🇨🇳 中文**](README-zh.md)
 
 </div>
 
@@ -49,7 +48,7 @@ graph TD
     Agent["🤖 AI Agent"] --> PROVENANCE["✅ PROVENANCE<br/>Execution Provenance"]
 ```
 
-> MCP connects tools. A2A coordinates agents. PROVENANCE proves execution — without requiring trust in any infrastructure.
+> *MCP connects tools. A2A coordinates agents. PROVENANCE proves execution — without requiring trust in any infrastructure.*
 
 PROVENANCE is **orthogonal, not competitive**. It sits transparently atop any OpenAI-compatible endpoint, capturing execution lineage, enforcing declarative constraints, and emitting tamper-evident audit proofs.
 
@@ -108,18 +107,13 @@ PROVENANCE assumes **storage, transport, and execution environments are untruste
 3. A standard cryptographic library
 
 ```bash
-# Canonicalize and verify an execution trace offline
-# Option A: Using npm canonicalize (Node.js)
-jq 'del(._*, .observations.internal_metrics)' trace.json \
-  | npx canonicalize \
-  | sha256sum
+# Verify a trace offline — no proxy, no SDK, no central server
+# Step 1: Strip non-signature fields, then canonicalize per RFC 8785
+jq 'del(._*, .observations.internal_metrics)' trace.json | \
+  python -m provenance.jcs | \
+  sha256sum
 
-# Option B: Using PyPI jsoncanon (Python)
-jq 'del(._*, .observations.internal_metrics)' trace.json \
-  | python -m jsoncanon \
-  | sha256sum
-
-# Compare output with trace.proofs.audit_signature
+# Step 2: Compare output with trace.proofs.audit_signature
 # ✅ Match = Untampered | ❌ Mismatch = Tamper detected
 ```
 
@@ -152,8 +146,7 @@ PROVENANCE is engineered for enterprise interoperability and regulatory readines
 | [**validator-js**](https://github.com/provenance-protocol/validator-js) | Schema validation & CI integration | JavaScript | ✅ Stable |
 | [**conformance**](https://github.com/provenance-protocol/spec/tree/main/conformance/v1) | Automated test suite & certification criteria | Python / Shell | ✅ Active |
 
-> 🗣️ **PRVN** is pronounced **/ˈpruːvən/** — "proven", as in "proven execution". It is the developer-facing engineering interface of the PROVENANCE Protocol.  
-> ℹ️ *Note: `prvn` refers specifically to the PROVENANCE Protocol reference CLI. Other tools using similar names are unrelated.*
+> 🗣️ **PRVN** is pronounced **/ˈpruːvən/** — "proven", as in "proven execution". It is the developer-facing engineering interface of the PROVENANCE Protocol.
 
 ---
 
@@ -167,8 +160,10 @@ go install github.com/provenance-protocol/prvn/cmd/prvn@latest
 export OPENAI_BASE_URL="https://api.openai.com"
 prvn proxy --listen :8080 --upstream "$OPENAI_BASE_URL"
 
-# 3. Verify a trace independently (zero trust)
-prvn verify trace.json
+# 3. Verify trace independently (zero trust)
+# Using the standalone validator (no proxy required)
+curl -s https://raw.githubusercontent.com/provenance-protocol/validator-js/main/verify.js | \
+  node - trace.json
 ```
 
 📖 [Full Specification](https://github.com/provenance-protocol/spec/tree/main/spec) · 
@@ -235,8 +230,6 @@ If you use PROVENANCE in research, please cite:
 
 🔗 [Preprint on arXiv](https://arxiv.org/abs/2605.xxxxx) · 
 📄 [Full Specification PDF](https://github.com/provenance-protocol/spec/releases/download/v1.0.0/spec-v1.0.0.pdf)
-
-> ℹ️ *arXiv link will be updated upon paper publication. Please check back for the final DOI.*
 
 ---
 
