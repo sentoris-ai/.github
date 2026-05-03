@@ -13,6 +13,7 @@
 > 🔒 *No server. No secret. No trust required.*
 
 </div>
+
 ---
 
 <div align="center">
